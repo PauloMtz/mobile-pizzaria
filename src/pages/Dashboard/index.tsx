@@ -1,7 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import { Text, SafeAreaView, TouchableOpacity, TextInput, StyleSheet } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { StackParamsList } from "../../routes/app.routes";
 
 export default function Dashboard() {
+    const navigation = useNavigation<NativeStackNavigationProp<StackParamsList>>();
+
+    const [number, setNumber] = useState('');
+
+    async function openOrder() {
+        if (number === '') {
+            return;
+        }
+
+        navigation.navigate('Order', {number: number, order_id: 'abc123'});
+    }
      
     // o safe-area-view é para o Iphone
     return (
@@ -9,9 +24,10 @@ export default function Dashboard() {
             <Text style={styles.title}>Novo Pedido</Text>
 
             <TextInput placeholder="Mesa" placeholderTextColor="#F0F0F0"
-                style={styles.input} keyboardType='numeric' />
+                style={styles.input} keyboardType='numeric'
+                value={number} onChangeText={setNumber} />
 
-            <TouchableOpacity style={styles.button}>
+            <TouchableOpacity style={styles.button} onPress={openOrder}>
                 <Text style={styles.buttonText}>Abrir Mesa</Text>
             </TouchableOpacity>
         </SafeAreaView>

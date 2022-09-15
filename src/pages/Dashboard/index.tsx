@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Text, SafeAreaView, TouchableOpacity, TextInput, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { StackParamsList } from "../../routes/app.routes";
+
+import { api } from "../../services/api";
+import { AuthContext } from "../../contexts/AuthContext";
 
 export default function Dashboard() {
     const navigation = useNavigation<NativeStackNavigationProp<StackParamsList>>();
@@ -15,7 +18,17 @@ export default function Dashboard() {
             return;
         }
 
-        navigation.navigate('Order', {number: number, order_id: 'abc123'});
+        // table é o campo que deve ser enviado para a api
+        // a propriedade number está como string, precisa converter
+        const response = await api.post('/api/orders', {
+            table: Number(number)
+        });
+
+        //console.log(response.data);
+
+        // vai para a próxima tela enviando esses parâmetros
+        navigation.navigate('Order', {number: number, order_id: response.data.id});
+        setNumber('');
     }
      
     // o safe-area-view é para o Iphone

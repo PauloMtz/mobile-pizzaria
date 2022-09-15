@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, TextInput } from "react-native";
 import { useRoute, RouteProp, useNavigation } from "@react-navigation/native";
 import { Feather } from '@expo/vector-icons';
@@ -12,12 +12,39 @@ type RouteDetailParams = {
     }
 }
 
+// a tabela de categorias no banco tem id e name
+type CategoryProps = {
+    id: string;
+    name: string;
+}
+
 type OrderRouteProps = RouteProp<RouteDetailParams, 'Order'>;
 
 export default function Order() {
     // pega os parâmetros enviados pela tela anterior
     const route = useRoute<OrderRouteProps>();
     const navigate = useNavigation();
+
+    // pode ser um array de categorias ou um array vazio
+    const [category, setCategory] = useState<CategoryProps[] | []>([]);
+    const [categorySelected, setCategorySelected] = useState<CategoryProps>();
+
+    const [amount, setAmount] = useState('1');
+
+    // quando carregar a tela, chama o que estiver dentro de useEffect
+    useEffect(() => {
+        // busca as categorias para carregar botão selecionar categoria
+        async function loadCategories() {
+            const response = await api.get('/api/categories');
+            
+            //console.log(response.data);
+
+            setCategory(response.data);
+            setCategorySelected(response.data[0]);// pega a primeira
+        }
+
+        loadCategories();
+    }, []);
 
     async function handleCloseOrder() {
         try {
@@ -44,9 +71,13 @@ export default function Order() {
                 </TouchableOpacity>
             </View>
 
-            <TouchableOpacity style={styles.input}>
-                <Text style={{color: '#FFF'}}>Pizzas</Text>
-            </TouchableOpacity>
+            {category.length !== 0 && (
+                <TouchableOpacity style={styles.input}>
+                    <Text style={{color: '#FFF'}}>
+                        {categorySelected?.name}
+                    </Text>
+                </TouchableOpacity>
+            )}
 
             <TouchableOpacity style={styles.input}>
                 <Text style={{color: '#FFF'}}>Pizza Calabresa</Text>
@@ -55,7 +86,7 @@ export default function Order() {
             <View style={styles.qtdContainer}>
                 <Text style={styles.qtdTexto}>Quantidade</Text>
                 <TextInput placeholder="1" placeholderTextColor="#F0F0F0"
-                    keyboardType="numeric" value="1" 
+                    keyboardType="numeric" value={amount} onChangeText={setAmount}
                     style={[styles.input, {width:'60%', textAlign:'center'}]} />
             </View>
 

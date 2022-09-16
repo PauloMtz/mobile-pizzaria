@@ -12,6 +12,7 @@ export default function Dashboard() {
     const navigation = useNavigation<NativeStackNavigationProp<StackParamsList>>();
 
     const [number, setNumber] = useState('');
+    //const { signOut } = useContext(AuthContext);
 
     async function openOrder() {
         if (number === '') {

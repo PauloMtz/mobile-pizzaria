@@ -61,6 +61,8 @@ export function AuthProvider({children}: AuthProviderProps) {
                     email: hasUser.email,
                     token: hasUser.token
                 });
+            } else {
+                signOut();
             }
 
             setLoading(false);

@@ -2,10 +2,12 @@ import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Modal, FlatList } from "react-native";
 import { useRoute, RouteProp, useNavigation } from "@react-navigation/native";
 import { Feather } from '@expo/vector-icons';
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 import { api } from '../../services/api';
 import { ModalPicker } from '../../components/ModalPicker';
 import { ListItem } from '../../components/ListItem';
+import { StackParamsList } from '../../routes/app.routes';
 
 type RouteDetailParams = {
     Order: {
@@ -38,7 +40,9 @@ type OrderRouteProps = RouteProp<RouteDetailParams, 'Order'>;
 export default function Order() {
     // pega os parâmetros enviados pela tela anterior
     const route = useRoute<OrderRouteProps>();
-    const navigate = useNavigation();
+
+    // navega para outra tela levando parâmetros
+    const navigate = useNavigation<NativeStackNavigationProp<StackParamsList>>();
 
     // pode ser um array de categorias ou um array vazio
     const [category, setCategory] = useState<CategoryProps[] | []>([]);
@@ -147,6 +151,11 @@ export default function Order() {
         setItems(listItemsNotRemoved);
     }
 
+    // avança para a tela de finalizar pedido
+    function handleFinishOrder() {
+        navigate.navigate("FinishOrder");
+    }
+
     return (
         <View style={styles.container}>
             <View style={styles.header}>
@@ -189,7 +198,7 @@ export default function Order() {
 
                 <TouchableOpacity 
                     style={[styles.button, {opacity: items.length === 0 ? 0.3 : 1}]}
-                    disabled={items.length === 0}>
+                    disabled={items.length === 0} onPress={handleFinishOrder}>
                     <Text style={styles.buttonText}>Avançar</Text>
                 </TouchableOpacity>
             </View>

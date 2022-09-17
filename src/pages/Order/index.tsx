@@ -128,6 +128,25 @@ export default function Order() {
           setItems(oldArray => [...oldArray, data])
     }
 
+    // remove item no pedido
+    async function handleDeleteItem(item_id: string) {
+        await api.delete('/api/orders/items', {
+            params: {
+                item_id: item_id,
+            }
+        });
+
+        // atualiza lista após remover item
+        let listItemsNotRemoved = items.filter(item => {
+            // percorre a lista e retorna ids diferentes dos removidos
+            return (
+                item.id !== item_id
+            )
+        });
+
+        setItems(listItemsNotRemoved);
+    }
+
     return (
         <View style={styles.container}>
             <View style={styles.header}>
@@ -179,7 +198,7 @@ export default function Order() {
                 showsVerticalScrollIndicator={false}
                 style={{flex:1, marginTop:24}}
                 data={items} keyExtractor={(item) => item.id}
-                renderItem={ ({ item }) => <ListItem data={item} />} />
+                renderItem={ ({ item }) => <ListItem data={item} removeItem={handleDeleteItem} />} />
 
             <Modal transparent={true} visible={modalCategoryVisible} animationType="fade">
                 <ModalPicker handleCloseModal={() => setModalCategoryVisible(false)}

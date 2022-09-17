@@ -55,10 +55,6 @@ export function AuthProvider({children}: AuthProviderProps) {
             if (Object.keys(hasUser).length > 0) {
                 api.defaults.headers.common['Authorization'] = `Bearer ${hasUser.token}`;
 
-                if (!api.defaults.headers.common['Authorization']) {
-                    signOut();
-                }
-
                 setUser({
                     id: hasUser.id,
                     name: hasUser.name,

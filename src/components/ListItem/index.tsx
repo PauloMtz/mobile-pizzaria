@@ -9,15 +9,21 @@ interface ItemProps {
     product_id: string;
     name: string;
     amount: string | number;
-  }
+  };
+  removeItem: (item_id: string) => void;
 }
 
-export function ListItem({ data }: ItemProps) {
+export function ListItem({ data, removeItem }: ItemProps) {
+
+  function handleRemoveItem() {
+    removeItem(data.id);
+  }
+
   return (
     <View style={styles.container}>
-      <Text style={styles.item}>{data.amount} - {data.name}</Text>
+      <Text style={styles.item}>{data.name}: {data.amount}</Text>
       
-      <TouchableOpacity>
+      <TouchableOpacity onPress={handleRemoveItem}>
         <Feather name="trash-2" color="#FF3F4b" size={25} />
       </TouchableOpacity>
     </View>

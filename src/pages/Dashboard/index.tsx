@@ -6,13 +6,12 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { StackParamsList } from "../../routes/app.routes";
 
 import { api } from "../../services/api";
-import { AuthContext } from "../../contexts/AuthContext";
+import ButtonLogout from "../../components/ButtonLogout";
 
 export default function Dashboard() {
     const navigation = useNavigation<NativeStackNavigationProp<StackParamsList>>();
 
     const [number, setNumber] = useState('');
-    //const { signOut } = useContext(AuthContext);
 
     async function openOrder() {
         if (number === '') {
@@ -44,6 +43,8 @@ export default function Dashboard() {
             <TouchableOpacity style={styles.button} onPress={openOrder}>
                 <Text style={styles.buttonText}>Abrir Mesa</Text>
             </TouchableOpacity>
+
+            <ButtonLogout/>
         </SafeAreaView>
     )
 }

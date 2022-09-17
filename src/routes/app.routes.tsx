@@ -27,7 +27,13 @@ function AppRoutes() {
     return (
         <Stack.Navigator>
             <Stack.Screen name="Dashboard" component={ Dashboard }
-                options={{ headerShown: false }} />
+                options={{
+                    title: 'Atendimento',
+                    headerStyle: {
+                        backgroundColor: '#1d1d2e'
+                    },
+                    headerTintColor: '#FFF'
+                 }} />
             
             <Stack.Screen name="Order" component={ Order }
                 options={{ headerShown: false }} />
